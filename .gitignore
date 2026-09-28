@@ -1,0 +1,6 @@
+**/.angular/
+**/node_modules/
+**/di**/
+**/target/
+*.log
+*.pack
