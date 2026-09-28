@@ -1,0 +1,323 @@
+/* Color Palette */
+:host {
+  --marine-blue: #006994;
+  --marine-green: #2E8B57;
+  --light-bg: #f0f8ff;
+  --text-dark: #0f2a36;
+  --text-light: #5a7582;
+  --card-bg: #ffffff;
+  --shadow-color: rgba(15, 42, 54, 0.15);
+}
+
+.packages-container {
+  background-color: var(--light-bg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  padding: 40px 5%;
+}
+
+/* Header and Search Bar Styles */
+.page-header {
+  text-align: center;
+  margin-bottom: 50px;
+
+  h1 {
+    color: var(--marine-blue);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    color: var(--text-light);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto 30px auto;
+  }
+}
+
+.search-bar {
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto;
+
+  input {
+    width: 100%;
+    padding: 16px 20px 16px 55px;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    font-size: 1rem;
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px var(--shadow-color);
+
+    &:focus {
+      outline: none;
+      border-color: var(--marine-green);
+      box-shadow: 0 4px 15px rgba(46, 139, 87, 0.3);
+    }
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    color: var(--text-light);
+  }
+}
+
+/* Filter Controls Section */
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  margin-bottom: 50px;
+  box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 200px;
+
+  label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-light);
+  }
+
+  select, input[type="range"] {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #fff;
+    cursor: pointer;
+  }
+  
+  input[type="range"] {
+    padding: 0;
+    accent-color: var(--marine-green);
+  }
+}
+
+.price-filter label span {
+  font-weight: 700;
+  color: var(--marine-blue);
+}
+
+.reset-btn {
+  padding: 10px 25px;
+  background-color: var(--marine-blue);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  align-self: flex-end;
+
+  &:hover {
+    background-color: #005073;
+  }
+}
+
+/* Packages Grid Section */
+.packages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 35px;
+}
+
+/* Individual Package Card Styles */
+.package-card {
+  position: relative; // For badge positioning
+  background: var(--card-bg);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px var(--shadow-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 30px var(--shadow-color);
+  }
+
+  .featured-badge {
+    position: absolute;
+    top: 15px;
+    left: -8px;
+    background-color: var(--marine-green);
+    color: white;
+    padding: 5px 15px 5px 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border-radius: 0 20px 20px 0;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+  }
+
+  .card-content {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .card-destination {
+    display: inline-block;
+    background-color: rgba(0, 105, 148, 0.1);
+    color: var(--marine-blue);
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    align-self: flex-start;
+  }
+
+  .card-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0 0 10px 0;
+  }
+
+  .card-duration {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 15px;
+  }
+
+  .card-description {
+    font-size: 1rem;
+    color: var(--text-light);
+    line-height: 1.6;
+    flex-grow: 1;
+    margin-bottom: 20px;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 15px;
+    margin-top: auto;
+  }
+
+  .card-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--marine-blue);
+  }
+
+  .card-button {
+    background-color: var(--marine-green);
+    color: white;
+    padding: 10px 25px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+
+    &:hover {
+      background-color: #257047;
+      transform: scale(1.05);
+    }
+  }
+}
+
+/* No Results Message */
+.no-results {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--text-light);
+
+  h2 {
+    color: var(--marine-blue);
+    font-size: 1.8rem;
+  }
+}
+
+/* Pagination Controls */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 40px;
+  
+  button {
+    padding: 8px 16px;
+    border: 1px solid var(--marine-blue);
+    background-color: transparent;
+    color: var(--marine-blue);
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &:hover:not(:disabled) {
+      background-color: var(--marine-blue);
+      color: white;
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+  
+  span {
+    font-weight: 600;
+    color: var(--text-dark);
+  }
+}
+
+
+/* Add this new style for the link wrapper */
+.package-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block; // Makes the link take up the full grid space
+  
+  // To keep the hover effect on the card, not the link
+  &:hover .package-card {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 30px var(--shadow-color);
+  }
+}
+
+/* Modify the .package-card styles slightly */
+.package-card {
+  // REMOVE the &:hover effect from here, as it's now on the parent link.
+  // The transition property can remain.
+  height: 100%; // Ensures all cards in a row have the same height
+}
+
+/* Update the .card-button style to look like the old one, but it's a div now */
+.card-button {
+  background-color: var(--marine-green);
+  color: white;
+  padding: 10px 25px;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}

@@ -1,0 +1,314 @@
+/* General & Utility Styles */
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2ecc71;
+  --accent-color: #9b59b6;
+  --dark-gray: #2c3e50;
+  --light-gray: #f8f9fa;
+  --text-color: #34495e;
+  --white-color: #ffffff;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--text-color);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+section {
+  padding: 5rem 0;
+}
+
+h1, h2, h3, h4 {
+  color: var(--dark-gray);
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+h4 {
+  font-size: 1.2rem;
+  margin: 0.75rem 0 0.25rem;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #2980b9;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* --- Hero Section --- */
+.hero-section {
+  position: relative;
+  height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+/*
+  This hyper-specific rule overrides frameworks like Bootstrap
+  to ensure the hero text is white.
+*/
+main .hero-section .hero-content h1,
+main .hero-section .hero-content p {
+  color: white;
+}
+
+.hero-content p {
+  font-size: 1.25rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* --- Mission Section --- */
+.mission-section {
+  background-color: var(--light-gray);
+}
+
+.mission-section p {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+/* --- Why Choose Us Section --- */
+.why-us-section .container > p {
+  text-align: center;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.feature-card {
+  text-align: center;
+  padding: 1.5rem;
+  background-color: var(--white-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.feature-icon-wrapper {
+  margin: 0 auto 1.5rem;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-icon-wrapper svg {
+  width: 32px;
+  height: 32px;
+  color: var(--white-color);
+}
+
+.icon-blue { background-color: var(--primary-color); }
+.icon-green { background-color: var(--secondary-color); }
+.icon-purple { background-color: var(--accent-color); }
+
+/* --- Story Section --- */
+.story-section {
+  background-color: var(--light-gray);
+}
+
+.flex-container {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.story-image, .story-content {
+  flex: 1;
+}
+
+.story-image img {
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.story-content h2 {
+  text-align: left;
+}
+
+/* --- Team Section --- */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.team-member {
+  text-align: center;
+}
+
+.team-member img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin: 0 auto;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.team-member p {
+  color: #777;
+  margin-top: 0.25rem;
+}
+
+/* --- Call to Action (CTA) Section --- */
+.cta-section {
+  background-color: var(--dark-gray);
+  color: var(--white-color);
+  text-align: center;
+}
+
+.cta-section h2, .cta-section h3, .cta-section h4 {
+  color: var(--white-color);
+}
+
+.cta-button {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.8rem 2rem;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 50px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+/* --- Footer Section --- */
+.footer {
+  background-color: var(--dark-gray);
+  color: var(--light-gray);
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.footer .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.footer-links {
+  margin-bottom: 1rem;
+}
+
+.footer-links a {
+  color: var(--white-color);
+  margin: 0 0.75rem;
+  font-weight: 500;
+}
+
+.footer-links a:hover {
+  color: var(--primary-color);
+}
+
+.footer p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #bdc3c7; /* A lighter gray for the copyright text */
+}
+
+/* --- Responsive Styles --- */
+@media (max-width: 768px) {
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 2rem; }
+  section { padding: 3rem 0; }
+
+  .hero-section {
+    height: 50vh;
+  }
+
+  .flex-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .story-content h2 {
+    text-align: center;
+  }
+  
+  /* Improved responsive layout for team members */
+  .team-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .team-member img {
+    width: 120px;
+    height: 120px;
+  }
+}

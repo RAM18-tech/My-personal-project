@@ -1,0 +1,29 @@
+<div class="scroll-container-wrapper">
+  <button class="scroll-btn left" (click)="scrollLeft()">
+    <i class="bi bi-chevron-left"></i>
+  </button>
+  <div class="scroll-container" #scrollContainer>
+    <div class="pkg-card" *ngFor="let pkg of packages">
+      <div class="image-container">
+        <img [src]="pkg.cardBgImage" alt="{{ pkg.to }}" />
+        <div class="overlay">
+          <h4>{{ pkg.from }} → {{ pkg.to }}</h4>
+          <p class="nights">{{ pkg.nights }} Night Tour</p>
+          <p class="desc">{{ pkg.description }}</p>
+          <p class="rating">
+            <i class="bi bi-star-fill text-warning"></i>
+            {{ pkg.rating }} • {{ pkg.reviews }} Reviews
+          </p>
+          <a class="see-all" routerLink="/packages">SEE ALL</a>
+        </div>
+      </div>
+      <img class="thumb" [src]="pkg.thumbImage" alt="{{ pkg.from }}" />
+    </div>
+  </div>
+  <button class="scroll-btn right" (click)="scrollRight()">
+    <i class="bi bi-chevron-right"></i>
+  </button>
+</div>
+
+
+  

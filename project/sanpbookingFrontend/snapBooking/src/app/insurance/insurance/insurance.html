@@ -1,0 +1,196 @@
+<!-- Standalone Page Mode -->
+<div *ngIf="isStandalonePage" class="insurance-page">
+  <div class="container mt-4">
+    <h1 class="mb-4">My Insurance</h1>
+   
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="text-center">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+   
+    <!-- No Insurance Found -->
+    <div *ngIf="!isLoading && userInsurances.length === 0 && !showAddForm" class="no-insurance">
+      <div class="text-center">
+        <i class="fa-solid fa-shield-alt fa-3x text-muted mb-3"></i>
+        <h3>No Insurance Found</h3>
+        <p class="text-muted">You don't have any travel insurance yet.</p>
+        <button class="btn btn-primary" (click)="showAddInsuranceForm()">Add Insurance</button>
+      </div>
+    </div>
+   
+    <!-- Existing Insurance List -->
+    <div *ngIf="!isLoading && userInsurances.length > 0 && !showAddForm">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Your Insurance Policy</h3>
+        <span class="text-muted">You can only have one active insurance</span>
+      </div>
+     
+      <div class="row">
+        <div *ngFor="let insurance of userInsurances" class="col-md-6 mb-3">
+          <div class="card insurance-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">{{insurance.provider}}</h5>
+              <span class="badge bg-success">{{insurance.status}}</span>
+            </div>
+            <div class="card-body">
+              <div class="row mb-2">
+                <div class="col-6"><strong>Medical Emergency:</strong></div>
+                <div class="col-6">₹{{insurance.medicalEmergency | number}}</div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-6"><strong>Accidental Death:</strong></div>
+                <div class="col-6">₹{{insurance.accidentalDeath | number}}</div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-6"><strong>Trip Cancellation:</strong></div>
+                <div class="col-6">₹{{insurance.tripCancellation | number}}</div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-6"><strong>Premium:</strong></div>
+                <div class="col-6">₹{{insurance.premium}}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-6"><strong>Valid:</strong></div>
+                <div class="col-6">{{insurance.startDate}} to {{insurance.endDate}}</div>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary btn-sm" (click)="editInsurance(insurance)">Edit</button>
+                <button class="btn btn-outline-danger btn-sm" (click)="deleteInsurance(insurance.insuranceId!)">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+   
+    <!-- Add/Edit Insurance Form -->
+    <div *ngIf="showAddForm" class="add-insurance-form">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>{{editingInsurance ? 'Edit' : 'Add'}} Insurance</h3>
+        <button class="btn btn-outline-secondary" (click)="cancelAddEdit()">Cancel</button>
+      </div>
+     
+      <form [formGroup]="insuranceForm" (ngSubmit)="handleSubmit()">
+        <div class="coverage-packages mb-4">
+          <h4>Select Coverage Package</h4>
+          <div class="row">
+            <div *ngFor="let package of coveragePackages" class="col-md-6 mb-3">
+              <div class="package-card"
+                   [class.selected]="selectedPackage === package"
+                   (click)="selectPackage(package)">
+                <h5>{{package.name}}</h5>
+                <div class="premium mb-2">₹{{package.premium}} premium</div>
+                <div class="coverage-details">
+                  <small>Medical: ₹{{package.medicalEmergency | number}}</small><br>
+                  <small>Death: ₹{{package.accidentalDeath | number}}</small><br>
+                  <small>Cancellation: ₹{{package.tripCancellation | number}}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+       
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Provider</label>
+            <select class="form-select" formControlName="provider">
+              <option value="">Select Provider</option>
+              <option *ngFor="let provider of providers" [value]="provider">{{provider}}</option>
+            </select>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Start Date</label>
+            <input type="date" class="form-control" formControlName="startDate">
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">End Date</label>
+            <input type="date" class="form-control" formControlName="endDate">
+          </div>
+        </div>
+       
+        <button type="submit" class="btn btn-primary" [disabled]="!selectedPackage || insuranceForm.invalid">
+          {{editingInsurance ? 'Update' : 'Add'}} Insurance
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+ 
+<!-- Modal Mode -->
+<div class="insurance-modal" *ngIf="showModal && !isStandalonePage">
+  <div class="modal-overlay" (click)="closeModal()"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Travel Insurance</h2>
+      <button class="close-btn" (click)="closeModal()">&times;</button>
+    </div>
+   
+    <form [formGroup]="insuranceForm" (ngSubmit)="handleSubmit()">
+      <div class="coverage-packages">
+        <h3>Select Coverage Package</h3>
+        <div class="packages-grid">
+          <div *ngFor="let package of coveragePackages"
+               class="package-card"
+               [class.selected]="selectedPackage === package"
+               (click)="selectPackage(package)">
+            <h4>{{package.name}}</h4>
+            <div class="coverage-list">
+              <div class="coverage-item">
+                <span>Medical Emergency:</span>
+                <span>₹{{package.medicalEmergency | number}}</span>
+              </div>
+              <div class="coverage-item">
+                <span>Accidental Death:</span>
+                <span>₹{{package.accidentalDeath | number}}</span>
+              </div>
+              <div class="coverage-item">
+                <span>Trip Cancellation:</span>
+                <span>₹{{package.tripCancellation | number}}</span>
+              </div>
+            </div>
+            <div class="premium">
+              <strong>Premium: ₹{{package.premium}}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+     
+      <div class="form-section">
+        <div class="form-group">
+          <label for="provider">Insurance Provider</label>
+          <select formControlName="provider" id="provider" required>
+            <option value="">Select Provider</option>
+            <option *ngFor="let provider of providers" [value]="provider">{{provider}}</option>
+          </select>
+          <div *ngIf="insuranceForm.get('provider')?.invalid && insuranceForm.get('provider')?.touched"
+               class="error">Provider is required</div>
+        </div>
+       
+        <div class="form-row">
+          <div class="form-group">
+            <label for="startDate">Start Date</label>
+            <input type="date" formControlName="startDate" id="startDate" required>
+            <div *ngIf="insuranceForm.get('startDate')?.invalid && insuranceForm.get('startDate')?.touched"
+                 class="error">Start date is required</div>
+          </div>
+         
+          <div class="form-group">
+            <label for="endDate">End Date</label>
+            <input type="date" formControlName="endDate" id="endDate" required>
+            <div *ngIf="insuranceForm.get('endDate')?.invalid && insuranceForm.get('endDate')?.touched"
+                 class="error">End date is required</div>
+          </div>
+        </div>
+      </div>
+     
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" (click)="skipInsurance()">Skip Insurance</button>
+        <button type="submit" class="btn-primary" [disabled]="!selectedPackage || insuranceForm.invalid">
+          Purchase Insurance
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

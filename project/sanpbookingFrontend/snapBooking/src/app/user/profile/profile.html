@@ -1,0 +1,104 @@
+<div class="profile-page-container" *ngIf="currentUser">
+  <div class="profile-grid">
+    
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="avatar">{{ currentUser.name?.charAt(0) }}</div>
+        <div class="user-info">
+          <h2 class="user-name">{{ currentUser.name }}</h2>
+          <!-- ✨ FIX: Changed currentUser.sub to currentUser.email -->
+          <p class="user-email">{{ currentUser.email }}</p>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="nav-link" [class.active]="activeTab === 'profile'" (click)="switchTab('profile')">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M4 22C4 17.5817 7.58172 14 12 14C16.4183 14 20 17.5817 20 22H4ZM12 13C8.68629 13 6 10.3137 6 7C6 3.68629 8.68629 1 12 1C15.3137 1 18 3.68629 18 7C18 10.3137 15.3137 13 12 13Z"></path></svg>
+          <span>My Profile</span>
+        </a>
+        <a class="nav-link" [class.active]="activeTab === 'bookings'" (click)="switchTab('bookings')">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 6H17V4C17 3.44772 16.5523 3 16 3H8C7.44772 3 7 3.44772 7 4V6H4C3.44772 6 3 6.44772 3 7V20C3 20.5523 3.44772 21 4 21H20C20.5523 21 21 20.5523 21 20V7C21 6.44772 20.5523 6 20 6ZM9 5H15V6H9V5Z"></path></svg>
+          <span>My Bookings</span>
+        </a>
+        <div class="nav-divider"></div>
+        <a (click)="logout()" class="nav-link logout">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M5 2H19C19.5523 2 20 2.44772 20 3V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V3C4 2.44772 4.44772 2 5 2ZM17 16V18H9V16H17ZM17 12V14H9V12H17ZM12 4V8L15 6L12 4Z"></path></svg>
+          <span>Logout</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="tab-pane" [hidden]="activeTab !== 'profile'">
+        <div class="profile-card">
+          <div class="profile-card-header">
+            <h3>Profile Information</h3>
+            <p>Update your personal details here.</p>
+          </div>
+          <form [formGroup]="profileForm" (ngSubmit)="handleProfileUpdate()">
+            <div class="profile-card-body">
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input id="username" type="text" formControlName="username" class="form-control" readonly>
+              </div>
+              <div class="form-group">
+                <label for="name">Full Name</label>
+                <input id="name" type="text" formControlName="name" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="email">Email Address (cannot be changed)</label>
+                <input id="email" type="email" formControlName="email" class="form-control" readonly>
+              </div>
+            </div>
+            <div class="profile-card-footer">
+              <button type="submit" class="btn btn-primary" [disabled]="profileForm.pristine || profileForm.invalid">
+                Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="tab-pane" [hidden]="activeTab !== 'bookings'">
+        <div class="bookings-card">
+          <div class="bookings-card-header">
+            <h3>My Bookings</h3>
+            <p>Here is a history of all your planned adventures.</p>
+          </div>
+          <div class="bookings-card-body">
+            <div *ngIf="isLoadingBookings" class="loading-state">
+              <div class="spinner"></div>
+              <p>Loading your bookings...</p>
+            </div>
+            <div *ngIf="!isLoadingBookings">
+              <div *ngIf="bookings.length > 0; else noBookings" class="bookings-grid">
+                <div *ngFor="let booking of bookings" class="booking-item">
+                    <div class="item-header">
+                      <h4 class="item-title">{{ booking.packageName }}</h4>
+                      <span class="status-badge" [ngClass]="booking.status">{{ booking.status }}</span>
+                    </div>
+                    <div class="item-body">
+                      <div class="detail-item">
+                        <span class="detail-label">Travel Date:</span>
+                        <span class="detail-value">{{ booking.travelDate | date:'fullDate' }}</span>
+                      </div>
+                      <div class="detail-item total-price">
+                        <span class="detail-label">Total Price:</span>
+                        <span class="detail-value">{{ booking.totalPrice | currency:'USD' }}</span>
+                      </div>
+                    </div>
+                </div>
+              </div>
+              <ng-template #noBookings>
+                <div class="empty-state">
+                  <div class="empty-icon">&#128708;</div>
+                  <h4>No Adventures Booked Yet</h4>
+                  <a routerLink="/" class="btn btn-secondary">Explore Packages</a>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

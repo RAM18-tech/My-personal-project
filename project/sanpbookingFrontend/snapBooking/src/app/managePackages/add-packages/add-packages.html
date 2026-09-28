@@ -1,0 +1,91 @@
+<div class="form-page-container">
+  <div class="form-wrapper">
+    <div class="form-header">
+      <h2>{{ isEditMode ? 'Edit Travel Package' : 'Create a New Package' }}</h2>
+      <p>{{ isEditMode ? 'Refine the details below. Changes will reflect in the live preview.' : 'Fill out the form to craft a new journey for your customers.' }}</p>
+    </div>
+
+    <form [formGroup]="packageForm" (ngSubmit)="handleFormSubmit()">
+      <div class="form-grid">
+        <div class="form-fields">
+          <div class="input-group">
+            <label for="name">Package Name</label>
+            <div class="input-with-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6V4H20V6H4ZM4 18V20H14V18H4ZM20 13V11H4V13H20Z"></path></svg>
+              <input id="name" type="text" formControlName="name" placeholder="e.g., Bali Tropical Adventure">
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="destination">Destination</label>
+            <div class="input-with-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 20.8995C16.9706 16.4348 20 12.6332 20 9C20 5.13401 16.866 2 13 2C11.0237 2 9.22081 2.92424 8.11356 4.31502L12 9.17203L15.8864 4.31502C14.7792 2.92424 12.9763 2 11 2C7.13401 2 4 5.13401 4 9C4 12.6332 7.02944 16.4348 12 20.8995Z"></path></svg>
+              <input id="destination" type="text" formControlName="destination" placeholder="e.g., Indonesia">
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="duration">Duration</label>
+             <div class="input-with-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 1v2h6V1h2v2h4v18H3V3h4V1h2Zm11 10H4v8h16v-8Zm-4-6H8v2h8V5Z"></path></svg>
+              <input id="duration" type="text" formControlName="duration" placeholder="e.g., 10 Days / 9 Nights">
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="price">Price ($)</label>
+            <div class="input-with-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2ZM10.6439 14.2361C10.0551 14.5305 9.49774 15.0118 9.50001 15.6813C9.50227 16.3508 10.0631 16.8354 10.6518 16.541L13.3482 15.2238C13.9369 14.9295 14.4943 14.4481 14.5 13.7786C14.5023 13.1091 13.9414 12.6245 13.3527 12.9189L12.001 13.582L10.6439 14.2361ZM12.001 11.5815L13.3512 10.9234C13.9399 10.629 14.4973 10.1477 14.5 9.47816C14.5023 8.80863 13.9414 8.32402 13.3527 8.61841L10.6563 9.93158C10.0676 10.226 9.50999 10.7076 9.50772 11.3772C9.50546 12.0467 10.0663 12.5313 10.6551 12.2369L12.001 11.5815Z"></path></svg>
+              <input id="price" type="number" formControlName="price" placeholder="e.g., 1650">
+            </div>
+          </div>
+          
+          <div class="input-group">
+            <label for="imageUrl">Image URL</label>
+            <div class="input-with-icon">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3C2.44772 3 2 3.44772 2 4V20C2 20.5523 2.44772 21 3 21H21C21.5523 21 22 20.5523 22 20V4C22 3.44772 21.5523 3 21 3H3ZM5.93952 5H18.0605L12 11.0605L5.93952 5ZM4 7.06048L10.9395 14L4 14V7.06048ZM13.0605 14L20 7.06048V14H13.0605ZM18.0605 19H5.93952L12 12.9395L18.0605 19ZM20 16.9395V18H20V16.9395L13.0605 10L20 16.9395Z"></path></svg>
+              <input id="imageUrl" type="text" formControlName="imageUrl" placeholder="https://images.unsplash.com/...">
+            </div>
+          </div>
+          
+          <div class="input-group">
+            <label for="description">Description</label>
+            <textarea id="description" rows="5" formControlName="description" placeholder="Describe the sights, activities, and experience..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-preview">
+          <h3>Live Preview</h3>
+          <div class="package-card">
+            <div class="card-image-container">
+              <img [src]="packageForm.value.imageUrl || 'assets/images/placeholder.jpg'" [alt]="packageForm.value.name" class="card-image" #previewImage (error)="previewImage.src='assets/images/placeholder.jpg'">
+              <div class="card-price-badge">${{ packageForm.value.price || 0 | number }}</div>
+            </div>
+            <div class="card-body">
+              <h2 class="card-title">{{ packageForm.value.name || 'Package Name' }}</h2>
+              <div class="card-details">
+                <span class="detail-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 20.8995C16.9706 16.4348 20 12.6332 20 9C20 5.13401 16.866 2 13 2C11.0237 2 9.22081 2.92424 8.11356 4.31502L12 9.17203L15.8864 4.31502C14.7792 2.92424 12.9763 2 11 2C7.13401 2 4 5.13401 4 9C4 12.6332 7.02944 16.4348 12 20.8995Z"></path></svg>
+                  {{ packageForm.value.destination || 'Destination' }}
+                </span>
+                <span class="detail-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 1v2h6V1h2v2h4v18H3V3h4V1h2Zm11 10H4v8h16v-8Zm-4-6H8v2h8V5Z"></path></svg>
+                  {{ packageForm.value.duration || 'Duration' }}
+                </span>
+              </div>
+              <p class="card-description">{{ packageForm.value.description || 'Your detailed package description will appear here as you type.' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" routerLink="/agent/dashboard">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="packageForm.invalid">
+           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M13 10H21.7805C21.4201 5.04838 17.3687 1 12 1C6.47715 1 2 5.47715 2 11C2 11.3364 2.02365 11.668 2.06942 12H11V10ZM13 14V22.9306C12.668 22.9763 12.3364 23 12 23C6.47715 23 2 18.5228 2 13C2 12.6636 2.02365 12.332 2.06942 12H11L13 14ZM15 14L22.5 18.5L15 23V14Z"></path></svg>
+          <span>{{ isEditMode ? 'Save Changes' : 'Create Package' }}</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

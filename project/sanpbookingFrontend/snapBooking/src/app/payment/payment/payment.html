@@ -1,0 +1,85 @@
+<div class="payment-wrapper" *ngIf="booking$ | async as booking; else loading">
+  <div class="payment-container">
+    <div class="payment-header">
+      <h1>Secure Payment</h1>
+      <p>Complete your booking by providing payment details below.</p>
+    </div>
+
+    <div class="payment-grid">
+      <div class="summary-column">
+        <div class="summary-card">
+          <h2>Order Summary</h2>
+          <div class="summary-item">
+            <span class="item-label">Package</span>
+            <span class="item-value">{{ booking.packageName }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="item-label">Travel Date</span>
+            <span class="item-value">{{ booking.travelDate | date:'fullDate' }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="item-label">Travelers</span>
+            <span class="item-value">{{ booking.numberOfTravelers }} person(s)</span>
+          </div>
+          <div class="summary-item">
+            <span class="item-label">Package Cost</span>
+            <span class="item-value">{{ (booking.totalPrice - (booking.insuranceSelected ? getInsuranceCost(booking) : 0)) | currency:'USD':'symbol':'1.2-2' }}</span>
+          </div>
+          <div class="summary-item" *ngIf="booking.insuranceSelected">
+            <span class="item-label">Travel Insurance</span>
+            <span class="item-value">{{ getInsuranceCost(booking) | currency:'USD':'symbol':'1.2-2' }}</span>
+          </div>
+          <div class="divider"></div>
+          <div class="summary-total">
+            <span class="item-label">Total Amount</span>
+            <span class="total-price">{{ booking.totalPrice | currency:'USD':'symbol':'1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-column">
+        <div class="payment-card">
+          <h2>Payment Details</h2>
+          <p class="payment-method-info">
+            You are being charged in USD. We will integrate a secure payment gateway here in the future.
+          </p>
+          <div class="mock-form">
+             <div class="form-group">
+                <label>Card Number</label>
+                <div class="mock-input">**** **** **** 1234</div>
+             </div>
+             <div class="form-group-row">
+                <div class="form-group">
+                    <label>Expiry Date</label>
+                    <div class="mock-input">12 / 28</div>
+                </div>
+                <div class="form-group">
+                    <label>CVC</label>
+                    <div class="mock-input">***</div>
+                </div>
+             </div>
+          </div>
+          <button class="pay-now-btn" (click)="processPayment(booking)">
+            Pay {{ booking.totalPrice | currency:'USD':'symbol':'1.2-2' }} Now
+          </button>
+          <div class="secure-info">
+            <span class="lock-icon">🔒</span>
+            <span>Payments are secure and encrypted.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="payment-wrapper">
+    <div class="skeleton-loader">
+        <div class="skeleton-header"></div>
+        <div class="skeleton-grid">
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+        </div>
+    </div>
+  </div>
+</ng-template>

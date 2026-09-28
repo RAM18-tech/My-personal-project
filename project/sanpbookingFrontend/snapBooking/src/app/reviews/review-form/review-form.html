@@ -1,0 +1,37 @@
+<form class="review-form-container" [formGroup]="reviewForm" (ngSubmit)="onSubmit()">
+  <h3>Write a Review</h3>
+  <div class="form-group">
+    <label>Your Rating</label>
+    <div class="star-rating" (mouseleave)="hoverRating = 0">
+      <span
+        *ngFor="let star of [1, 2, 3, 4, 5]"
+        class="star"
+        (mouseover)="hoverRating = star"
+        (click)="setRating(star)"
+        [class.filled]="star <= (hoverRating || reviewForm.get('rating')?.value)">
+        ★
+      </span>
+    </div>
+    <div *ngIf="reviewForm.get('rating')?.touched && reviewForm.get('rating')?.errors?.['min']" class="error-text">
+      Please select a rating.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="comment">Your Comment</label>
+    <textarea
+      id="comment"
+      formControlName="comment"
+      rows="5"
+      placeholder="Tell us about your experience...">
+    </textarea>
+    <div *ngIf="reviewForm.get('comment')?.touched && reviewForm.get('comment')?.invalid" class="error-text">
+      <span *ngIf="reviewForm.get('comment')?.errors?.['required']">Comment is required.</span>
+      <span *ngIf="reviewForm.get('comment')?.errors?.['minlength']">Comment must be at least 10 characters long.</span>
+    </div>
+  </div>
+
+  <button type="submit" class="submit-btn" [disabled]="reviewForm.invalid || isSubmitting">
+    {{ isSubmitting ? 'Submitting...' : 'Submit Review' }}
+  </button>
+</form>

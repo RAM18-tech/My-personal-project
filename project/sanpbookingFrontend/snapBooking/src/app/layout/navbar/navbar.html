@@ -1,0 +1,83 @@
+<!-- Top Header Info -->
+<div class="top-header">
+  <!-- Contact Info -->
+  <div class="contact-info">
+    <span><i class="bi bi-envelope"></i> supporttravelagency.com</span>
+    <span><i class="bi bi-telephone"></i> +917 336831</span>
+  </div>
+
+  <!-- Actions: Social + Language -->
+  <div class="top-actions d-flex align-items-center gap-3 flex-wrap">
+    <ul class="social list-inline mb-0 d-flex">
+      <li class="list-inline-item"><a href="https://www.facebook.com/"><i class="bi bi-facebook"></i></a></li>
+      <li class="list-inline-item"><a href="https://twitter.com/"><i class="bi bi-twitter-x"></i></a></li>
+      <li class="list-inline-item"><a href="https://www.google.com/"><i class="bi bi-google"></i></a></li>
+      <li class="list-inline-item"><a href="https://www.instagram.com/"><i class="bi bi-instagram"></i></a></li>
+      <li class="list-inline-item"><a href="https://vimeo.com/"><i class="bi bi-vimeo"></i></a></li>
+    </ul>
+
+    <div class="language-selector">
+      <div class="dropdown">
+        <button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+          English
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#">German</a></li>
+          <li><a class="dropdown-item" href="#">Russian</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Navbar -->
+<nav class="navbar navbar-expand-md main-navbar">
+  <div class="container-fluid">
+    <!-- Logo -->
+    <a class="navbar-brand d-flex align-items-center" routerLink="/">
+      <img src="assets/images/pagelogo.png" alt="Snap Booking Logo" class="snap me-2">
+      <span class="logo-text">SnapBooking</span>
+    </a>
+
+    <!-- Toggler for mobile view -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Nav Links -->
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/home" >Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/about" >About Us</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/insurance" >Insurance</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/packages">Packages</a>
+        </li>
+        @if(!isLoggedIn()){
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/login">Login</a>
+        </li>
+      }
+      @else{
+
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/profile">Profile</a>
+        </li>
+
+        <li class="nav-item">
+          <button class="nav-link" (click)="logout()">Logout</button>
+        </li>
+
+      }
+      </ul>
+    </div>
+  </div>
+</nav>

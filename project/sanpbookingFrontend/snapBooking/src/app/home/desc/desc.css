@@ -1,0 +1,102 @@
+/* ===== Why Us Section (Image_4 Style) ===== */
+.why-us-section {
+  padding: 100px 20px;
+  background-color: #f9f9f9;
+  text-align: center;
+  border-top: 5px solid #1cbbb4;
+}
+
+.why-us-section h2 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1cbbb4;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  letter-spacing: 1.5px;
+}
+
+.why-us-section .subtitle {
+  font-size: 18px;
+  color: #555;
+  max-width: 800px;
+  margin: 0 auto 60px auto;
+  line-height: 1.8;
+}
+
+/* Card Grid */
+.features-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+/* Individual Card */
+.feature-item {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: 30px 20px;
+  text-align: center;
+  width: 250px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.feature-item i {
+  font-size: 50px;
+  color: #1cbbb4;
+  margin-bottom: 20px;
+}
+
+.feature-item h3 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.feature-item p {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.feature-item a {
+  text-decoration: none;
+  color: #1cbbb4;
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.feature-item a:hover {
+  color: #007b8f;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .feature-item {
+    width: 45%;
+  }
+}
+
+@media (max-width: 576px) {
+  .feature-item {
+    width: 100%;
+  }
+
+  .why-us-section h2 {
+    font-size: 30px;
+  }
+
+  .why-us-section .subtitle {
+    font-size: 16px;
+  }
+}
+

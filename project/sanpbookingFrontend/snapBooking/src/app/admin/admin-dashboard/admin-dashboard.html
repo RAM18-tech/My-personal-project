@@ -1,0 +1,228 @@
+<div class="dashboard-container">
+  
+  <header class="dashboard-header">
+    <h1>Admin Cockpit</h1>
+    <p>Platform overview and management tools</p>
+  </header>
+
+  <div class="summary-grid">
+    <div class="stat-card">
+      <div class="icon-wrapper" style="--icon-bg: #2a3a5b; --icon-color: #6c9cff;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+      </div>
+      <div class="info">
+        <span>Total Users</span>
+        <strong>{{ users.length || 0 }}</strong>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="icon-wrapper" style="--icon-bg: #2f4f4f; --icon-color: #40e0d0;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+      </div>
+      <div class="info">
+        <span>Total Agents</span>
+        <strong>{{ agents.length || 0 }}</strong>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="icon-wrapper" style="--icon-bg: #4d324d; --icon-color: #cc88cc;">
+         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+      </div>
+      <div class="info">
+        <span>Packages by Agent</span>
+        <strong class="dynamic-value">{{ selectedAgent ? packages.length : '—' }}</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-link" [class.active]="currentTab === 'agents'" (click)="switchTab('agents')">Agent Management</button>
+    <button class="tab-link" [class.active]="currentTab === 'users'" (click)="switchTab('users')">User Management</button>
+  </div>
+
+  <div class="tab-content" [hidden]="currentTab !== 'agents'">
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-header">
+          <h2>Travel Agents</h2>
+          <div class="header-actions">
+            <input type="text" placeholder="Search agents..." class="search-bar" [(ngModel)]="agentSearchTerm" (input)="filterAgents()">
+            <button class="btn btn-primary" (click)="openAddUserModal('agent')">+ Create Agent</button>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead><tr><th>Agent Details</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              @for(agent of filteredAgents; track agent.id) {
+                <tr [class.selected]="selectedAgent?.id === agent.id">
+                  <td data-label="Agent">
+                    <div class="user-info">
+                      <div class="avatar-placeholder">{{ agent.name.charAt(0).toUpperCase() }}</div>
+                      <div class="details"><span class="name">{{ agent.name }}</span><span class="email">{{ agent.email }}</span></div>
+                    </div>
+                  </td>
+                  <td data-label="Status"><span class="status-badge active">Active</span></td>
+                  <td data-label="Actions" class="actions-cell">
+                    <button class="btn btn-secondary" (click)="viewAgentPackages(agent)">View Packages</button>
+                    <button class="btn btn-icon" (click)="openEditUserModal(agent)" title="Edit">✏️</button>
+                    <button class="btn btn-icon" (click)="deleteUser(agent.username)" title="Delete">🗑️</button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr><td colspan="3" class="empty-state">No agents found.</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>Packages by {{ selectedAgent ? selectedAgent.name : 'Selected Agent' }}</h2>
+        </div>
+        @if (selectedAgent) {
+          <div class="table-responsive">
+            <table>
+              <thead><tr><th>Package</th><th>Destination</th><th>Price</th><th>Actions</th></tr></thead>
+              <tbody>
+                @for(pkg of packages; track pkg.id) {
+                  <tr>
+                    <td data-label="Package">{{ pkg.name }}</td>
+                    <td data-label="Destination">{{ pkg.destination }}</td>
+                    <td data-label="Price">${{ pkg.price | number }}</td>
+                    <td data-label="Actions" class="actions-cell">
+                      <button class="btn btn-icon" (click)="openEditPackageModal(pkg)" title="Edit">✏️</button>
+                      <button class="btn btn-icon" (click)="deletePackage(pkg.id)" title="Delete">🗑️</button>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr><td colspan="4" class="empty-state">This agent has no packages.</td></tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <div class="placeholder"><p>Select an agent to view their packages.</p></div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" [hidden]="currentTab !== 'users'">
+    <div class="card full-width-card">
+      <div class="card-header">
+        <h2>App Users</h2>
+        <div class="header-actions">
+          <input type="text" placeholder="Search users..." class="search-bar" [(ngModel)]="userSearchTerm" (input)="filterUsers()">
+          <button class="btn btn-primary" (click)="openAddUserModal('user')">+ Create User</button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead><tr><th>User Details</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            @for(user of filteredUsers; track user.id) {
+              <tr>
+                <td data-label="User">
+                  <div class="user-info">
+                    <div class="avatar-placeholder">{{ user.name.charAt(0).toUpperCase() }}</div>
+                    <div class="details"><span class="name">{{ user.name }}</span><span class="email">{{ user.email }}</span></div>
+                  </div>
+                </td>
+                <td data-label="Status"><span class="status-badge active">Active</span></td>
+                <td data-label="Actions" class="actions-cell">
+                  <button class="btn btn-icon" (click)="openEditUserModal(user)" title="Edit">✏️</button>
+                  <button class="btn btn-icon" (click)="deleteUser(user.username)" title="Delete">🗑️</button>
+                </td>
+              </tr>
+            } @empty {
+              <tr><td colspan="3" class="empty-state">No users found.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (showUserModal) {
+  <div class="modal-overlay" (click)="closeUserModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <form [formGroup]="userForm" (ngSubmit)="handleUserFormSubmit()">
+        <div class="modal-header">
+          <h3>{{ isEditMode ? 'Edit User' : 'Create New User' }}</h3>
+          <button type="button" class="close-btn" (click)="closeUserModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-field">
+            <label for="name">Full Name</label>
+            <input id="name" type="text" formControlName="name" placeholder="Enter full name">
+          </div>
+          <div class="form-field">
+            <label for="email">Email</label>
+            <input id="email" type="email" formControlName="email" placeholder="Enter email address">
+          </div>
+          @if (!isEditMode) {
+            <div class="form-field">
+              <label for="password">Password</label>
+              <input id="password" type="password" formControlName="password" placeholder="Min 6 characters">
+            </div>
+            <div class="form-field">
+              <label for="role">Role</label>
+              <select id="role" formControlName="role">
+                <option value="user">User</option>
+                <option value="agent">Agent</option>
+              </select>
+            </div>
+          }
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeUserModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">{{ isEditMode ? 'Save Changes' : 'Create User' }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+@if (showPackageModal) {
+  <div class="modal-overlay" (click)="closePackageModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <form [formGroup]="packageForm" (ngSubmit)="handlePackageFormSubmit()">
+        <div class="modal-header">
+          <h3>Edit Package</h3>
+          <button type="button" class="close-btn" (click)="closePackageModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="pkg-name">Package Name</label>
+              <input id="pkg-name" type="text" formControlName="name">
+            </div>
+            <div class="form-field">
+              <label for="pkg-dest">Destination</label>
+              <input id="pkg-dest" type="text" formControlName="destination">
+            </div>
+            <div class="form-field">
+              <label for="pkg-duration">Duration (days)</label>
+              <input id="pkg-duration" type="text" formControlName="duration">
+            </div>
+            <div class="form-field">
+              <label for="pkg-price">Price ($)</label>
+              <input id="pkg-price" type="number" formControlName="price">
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="pkg-desc">Description</label>
+            <textarea id="pkg-desc" formControlName="description" rows="4"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closePackageModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="packageForm.invalid">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

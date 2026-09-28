@@ -1,0 +1,58 @@
+
+
+<div class="bookings-container">
+  <header class="bookings-header">
+    <h1>My Bookings</h1>
+    <p>Here is a history of all your planned adventures with us.</p>
+  </header>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading your bookings...</p>
+  </div>
+
+  <!-- Content Area -->
+  <div *ngIf="!isLoading">
+    <!-- Bookings Grid -->
+    <div *ngIf="bookings.length > 0; else noBookings" class="bookings-grid">
+      <div *ngFor="let booking of bookings" class="booking-card">
+        <div class="card-header">
+          <h2 class="package-name">{{ booking.packageName }}</h2>
+          <span class="status-badge" [ngClass]="booking.status">{{ booking.status }}</span>
+        </div>
+        <div class="card-body">
+          <div class="detail-item">
+            <span class="detail-label">Travel Date:</span>
+            <span class="detail-value">{{ booking.travelDate | date:'fullDate' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Booking Date:</span>
+            <span class="detail-value">{{ booking.bookingDate | date:'longDate' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Travelers:</span>
+            <span class="detail-value">{{ booking.numberOfTravelers }}</span>
+          </div>
+          <div class="detail-item total-price">
+            <span class="detail-label">Total Price:</span>
+            <span class="detail-value">{{ booking.totalPrice | currency:'USD' }}</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a [routerLink]="['/packages', booking.packageId]" class="btn btn-secondary">View Package Details</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State Template -->
+    <ng-template #noBookings>
+      <div class="empty-state">
+        <div class="empty-icon">&#128708;</div> <!-- 🧳 -->
+        <h2>No Adventures Booked Yet</h2>
+        <p>Your dream vacation is just a few clicks away. Explore our packages and start planning!</p>
+        <a routerLink="/" class="btn btn-primary">Explore Packages</a>
+      </div>
+    </ng-template>
+  </div>
+</div>

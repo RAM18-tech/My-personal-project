@@ -1,0 +1,102 @@
+<main class="packages-container">
+  <header class="page-header">
+    <h1>Explore Our Travel Packages 🌊</h1>
+    <p class="subtitle">Find your next adventure in the most beautiful destinations.</p>
+    <div class="search-bar">
+      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm-5.3-3.71l-4.7 4.7a1 1 0 001.42 1.42l4.7-4.7a1 1 0 00-1.42-1.42z"></path>
+      </svg>
+      <input 
+        type="text" 
+        placeholder="Search by name or description..."
+        [(ngModel)]="searchTerm"
+        (input)="applyFilters()"
+      >
+    </div>
+  </header>
+
+  <section class="filter-controls">
+    <div class="filter-group">
+      <label for="destination-filter">Destination</label>
+      <select id="destination-filter" [(ngModel)]="selectedDestination" (change)="applyFilters()">
+        <option value="">All Destinations</option>
+        <option *ngFor="let dest of uniqueDestinations" [value]="dest">{{ dest }}</option>
+      </select>
+    </div>
+
+    <div class="filter-group price-filter">
+      <label for="price-filter">Max Price: <span>{{ maxPrice | currency:'USD':'symbol': '1.0-0' }}</span></label>
+      <input 
+        type="range" 
+        id="price-filter" 
+        min="0" 
+        [max]="priceRange.max" 
+        step="50"
+        [(ngModel)]="maxPrice"
+        (input)="applyFilters()"
+      >
+    </div>
+
+    <div class="filter-group">
+      <label for="duration-filter">Max Duration (Days)</label>
+      <select id="duration-filter" [(ngModel)]="selectedDuration" (change)="applyFilters()">
+        <option [ngValue]="0">Any Duration</option>
+        <option [ngValue]="5">Up to 5 Days</option>
+        <option [ngValue]="7">Up to 7 Days</option>
+        <option [ngValue]="10">Up to 10 Days</option>
+        <option [ngValue]="11">10+ Days</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="sort-by">Sort By</label>
+      <select id="sort-by" [(ngModel)]="sortBy" (change)="applyFilters()">
+        <option value="default">Default</option>
+        <option value="priceAsc">Price: Low to High</option>
+        <option value="priceDesc">Price: High to Low</option>
+        <option value="nameAsc">Name: A to Z</option>
+      </select>
+    </div>
+
+    <button class="reset-btn" (click)="resetFilters()">Reset</button>
+  </section>
+
+  <section *ngIf="paginatedPackages.length > 0; else noResults" class="packages-grid">
+    <a *ngFor="let package of paginatedPackages" 
+       [routerLink]="['/packages', package.id]" 
+       class="package-card-link">
+      
+      <div class="package-card">
+        <img [src]="package.imageUrl" [alt]="package.name" class="card-image">
+        <div class="card-content">
+          <span class="card-destination">{{ package.destination }}</span>
+          <h3 class="card-title">{{ package.name }}</h3>
+          <p class="card-duration">{{ package.duration }}</p>
+          <p class="card-description">{{ package.description }}</p>
+          <div class="card-footer">
+            <span class="card-price">{{ package.price | currency:'USD':'symbol' }}</span>
+            <div class="card-button">View Details</div>
+          </div>
+        </div>
+      </div>
+
+    </a>
+  </section>
+
+  <ng-template #noResults>
+    <div class="no-results">
+      <h2>No Packages Found</h2>
+      <p>Try adjusting your search or filter terms to find your perfect getaway!</p>
+    </div>
+  </ng-template>
+
+  <section *ngIf="totalPages > 1" class="pagination-controls">
+    <button (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1">
+      &laquo; Prev
+    </button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button (click)="setPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+      Next &raquo;
+    </button>
+  </section>
+</main>

@@ -1,0 +1,147 @@
+<!-- Main Dashboard Container -->
+<div class="dashboard-container">
+
+  <!-- Header Section -->
+  <header class="dashboard-header">
+    <div class="header-content">
+      <div class="header-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M21 17H20V12.2361C20 8.79153 17.5228 6 14.5 6C11.4772 6 9 8.79153 9 12.2361V17H8V12.2361C8 8.23838 10.933 5 14.5 5C18.067 5 21 8.23838 21 12.2361V17ZM16 17H13V19H16V17ZM8 19H5V17H8V19ZM12 6V7H5V6H12ZM5 9H12V10H5V9ZM12 12H5V13H12V12Z"></path></svg>
+      </div>
+      <div class="header-text">
+        <h1>Agent Command Center</h1>
+        <p>Manage travel packages and engage with customer feedback.</p>
+      </div>
+    </div>
+    <a routerLink="/agent/add-package" class="add-package-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2h6Z"></path></svg>
+      <span>Create New Package</span>
+    </a>
+  </header>
+
+  <!-- Loading State -->
+  @if (isLoading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Syncing package data...</p>
+    </div>
+  }
+
+  <!-- Content: Packages Grid or Empty State -->
+  @if (!isLoading) {
+    @if (packagesWithReviews.length > 0) {
+      <div class="packages-grid">
+        @for(pkg of packagesWithReviews; track pkg.id) {
+          <div class="package-card">
+            <div class="card-image-wrapper">
+              <img [src]="pkg.imageUrl || 'https://placehold.co/600x400/1a1a2e/ffffff?text=Package'" [alt]="pkg.name" class="card-image">
+              <div class="card-price-badge">{{ pkg.price | currency:'USD':'symbol':'1.0-0' }}</div>
+            </div>
+            <div class="card-content">
+              <h2 class="card-title">{{ pkg.name }}</h2>
+              <div class="card-meta">
+                <span><i class="fa-solid fa-location-dot"></i> {{ pkg.destination }}</span>
+                <span><i class="fa-solid fa-calendar-days"></i> {{ pkg.duration }} Days</span>
+              </div>
+              <p class="card-description">{{ pkg.description | slice:0:100 }}{{ pkg.description.length > 100 ? '...' : '' }}</p>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-reviews" (click)="openReviewModal(pkg)">
+                <i class="fa-solid fa-comments"></i>
+                <span>View Reviews</span>
+                @if (getUnansweredReviewCount(pkg) > 0) {
+                  <span class="notification-badge">{{ getUnansweredReviewCount(pkg) }}</span>
+                }
+              </button>
+              <div class="action-buttons">
+                <a [routerLink]="['/agent/edit-package', pkg.id!.toString()]" class="btn-icon btn-edit" title="Edit Package">
+                  <i class="fa-solid fa-pencil"></i>
+                </a>
+                <button (click)="deletePackage(pkg.id!.toString())" class="btn-icon btn-delete" title="Delete Package">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="empty-state">
+        <div class="empty-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 6H17V4C17 3.44772 16.5523 3 16 3H8C7.44772 3 7 3.44772 7 4V6H4C3.44772 6 3 6.44772 3 7V20C3 20.5523 3.44772 21 4 21H20C20.5523 21 21 20.5523 21 20V7C21 6.44772 20.5523 6 20 6ZM9 5H15V6H9V5ZM12 16L9 12H11V9H13V12H15L12 16Z"></path></svg>
+        </div>
+        <h2>No Packages Found</h2>
+        <p>Your command center is ready. Create your first travel package to begin.</p>
+        <a routerLink="/agent/add-package" class="add-package-btn">+ Create First Package</a>
+      </div>
+    }
+  }
+</div>
+
+<!-- Review Management Modal -->
+@if (showReviewModal && selectedPackage) {
+  <div class="modal-overlay" (click)="closeReviewModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <header class="modal-header">
+        <div class="modal-title">
+          <h2>Reviews for: {{ selectedPackage.name }}</h2>
+          <p>{{ selectedPackage.reviews.length }} total reviews</p>
+        </div>
+        <button class="close-btn" (click)="closeReviewModal()" title="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </header>
+      <div class="modal-body">
+        @if (selectedPackage.reviews.length > 0) {
+          <div class="reviews-list">
+            @for(review of selectedPackage.reviews; track review.id) {
+              <div class="review-card">
+                <div class="review-header">
+                  <div class="review-author">
+                    <div class="author-avatar">{{ review.userName.charAt(0) }}</div>
+                    <span>{{ review.userName }}</span>
+                  </div>
+                  <div class="review-rating">
+                    @for(i of [].constructor(review.rating); track i) { <i class="fa-solid fa-star"></i> }
+                    @for(i of [].constructor(5 - review.rating); track i) { <i class="fa-regular fa-star"></i> }
+                  </div>
+                </div>
+                <p class="review-comment">"{{ review.comment }}"</p>
+                <div class="review-date">{{ review.reviewDate | date:'fullDate' }}</div>
+
+                <!-- Agent Response Section -->
+                <div class="agent-response-section">
+                  @if(review.agentResponse) {
+                    <div class="agent-reply existing-reply">
+                      <strong class="reply-title">Your Reply:</strong>
+                      <p>{{ review.agentResponse }}</p>
+                      <div class="reply-date">{{ review.responseDate | date:'fullDate' }}</div>
+                    </div>
+                  } @else {
+                    <form [formGroup]="replyForm" (ngSubmit)="handleReplySubmit(review.id)" class="agent-reply-form">
+                      <div class="form-group">
+                         <textarea [formControlName]="'reply_' + review.id" placeholder="Write a public response..." rows="3"></textarea>
+                         @if(replyForm.get('reply_' + review.id)?.touched && replyForm.get('reply_' + review.id)?.invalid) {
+                            <div class="error-message">A meaningful reply is required (min 10 chars).</div>
+                         }
+                      </div>
+                      <button type="submit" class="btn-submit-reply" [disabled]="replyForm.get('reply_' + review.id)?.invalid || replyForm.get('reply_' + review.id)?.disabled">
+                        <i class="fa-solid fa-paper-plane"></i> Send Reply
+                      </button>
+                    </form>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="no-reviews-state">
+            <i class="fa-solid fa-inbox"></i>
+            <h3>No Reviews Yet</h3>
+            <p>There is no customer feedback for this package yet.</p>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}
+

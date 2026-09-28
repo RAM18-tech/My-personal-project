@@ -1,0 +1,147 @@
+<div class="page-container" *ngIf="!isLoading; else loadingPackage">
+
+  <div *ngIf="currentPackage; else noPackageFound">
+    <div class="package-header">
+      <h1 class="package-title">{{ currentPackage.name }}</h1>
+      <div class="package-meta">
+        <span><i class="fa-solid fa-map-marker-alt"></i> {{ currentPackage.destination }}</span>
+        <span><i class="fa-solid fa-clock"></i> {{ currentPackage.duration }} days</span>
+      </div>
+    </div>
+    
+    <div class="package-layout-grid">
+      <div class="package-main-content">
+        <img [src]="currentPackage.imageUrl || 'https://placehold.co/1200x800/1F2937/FFFFFF?text=A+Modern+Escape'" alt="{{ currentPackage.name }}" class="package-image">
+
+        <div class="content-wrapper">
+          <section class="content-section">
+            <h2>About this Trip</h2>
+            <p class="package-description">{{ currentPackage.description }}</p>
+          </section>
+
+          <section class="content-section reviews-section">
+            <h2>Customer Reviews</h2>
+            
+            <div class="review-submission-wrapper" *ngIf="canUserReview && currentUser">
+              <h3>Leave a Review</h3>
+              <app-review-form 
+                [packageId]="currentPackage.id"
+                [userId]="currentUser.id"
+                [userName]="currentUser.name"
+                (reviewSubmitted)="onReviewSubmitted()">
+              </app-review-form>
+            </div>
+
+            <div *ngIf="reviews.length > 0; else noReviews">
+              <div *ngFor="let review of reviews" class="review-card">
+                <div class="review-header">
+                  <div class="author-info">
+                    <div class="author-avatar">{{ review.userName.charAt(0) }}</div>
+                    <span class="review-author">{{ review.userName }}</span>
+                  </div>
+                  <div class="star-rating" *ngIf="editingReviewId !== review.id">
+                    <span *ngFor="let i of [].constructor(review.rating)" class="star filled">★</span>
+                    <span *ngFor="let i of [].constructor(5 - review.rating)" class="star">☆</span>
+                  </div>
+                  <div class="review-actions" *ngIf="canEditReview(review) && editingReviewId !== review.id">
+                    <button (click)="startEditReview(review)" class="edit-btn" title="Edit">✏️</button>
+                    <button (click)="deleteReview(review.id)" class="delete-btn" title="Delete">🗑️</button>
+                  </div>
+                </div>
+                
+                <div *ngIf="editingReviewId === review.id; else viewMode" [formGroup]="editForm">
+                  <div class="edit-rating">
+                    <span *ngFor="let i of [1,2,3,4,5]" (click)="editForm.patchValue({rating: i})" 
+                          [class.filled]="editForm.value.rating >= i" class="star-edit">★</span>
+                  </div>
+                  <textarea formControlName="comment" class="edit-comment" rows="3"></textarea>
+                  <div class="edit-actions">
+                    <button (click)="saveEditReview(review.id)" class="save-btn">Save</button>
+                    <button (click)="cancelEdit()" class="cancel-btn">Cancel</button>
+                  </div>
+                </div>
+                <ng-template #viewMode>
+                  <p class="review-comment">{{ review.comment }}</p>
+                  <div class="review-date">{{ review.reviewDate | date:'longDate' }}</div>
+                </ng-template>
+
+                <div *ngIf="review.agentResponse" class="agent-response">
+                  <div class="response-header">
+                    <strong>Response from the Agency</strong>
+                  </div>
+                  <p class="response-comment">{{ review.agentResponse }}</p>
+                  <div class="response-date">{{ review.responseDate | date:'longDate' }}</div>
+                </div>
+              </div>
+            </div>
+            <ng-template #noReviews>
+              <p class="no-reviews-message">Be the first to leave a review for this amazing package!</p>
+            </ng-template>
+          </section>
+        </div>
+      </div>
+
+      <div class="package-booking-panel">
+        <div class="booking-panel-content">
+          <div class="price-display">
+            <span class="price-amount">{{ currentPackage.price | currency:'USD':'symbol':'1.0-0' }}</span>
+            <span class="price-label">/ person</span>
+          </div>
+          <p class="booking-panel-info">Taxes and fees included. Select your dates to book.</p>
+          <button class="book-now-btn" (click)="openBookingModal()">
+            Book This Package <i class="fa-solid fa-arrow-right"></i>
+          </button>
+          <ul class="key-features">
+            <li><i class="fa-solid fa-check"></i> Best price guarantee</li>
+            <li><i class="fa-solid fa-check"></i> Free cancellation option</li>
+            <li><i class="fa-solid fa-check"></i> Instant confirmation</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mobile-action-bar" *ngIf="currentPackage && !isLoading">
+  <div class="price-display-mobile">
+    <span class="price-amount">{{ currentPackage.price | currency:'USD':'symbol':'1.0-0' }}</span>
+    <span class="price-label">/ person</span>
+  </div>
+  <button class="book-now-btn-mobile" (click)="openBookingModal()">Book Now</button>
+</div>
+
+<div class="modal-overlay" *ngIf="showBookingModal">
+  <div class="modal-content" *ngIf="currentPackage">
+    <button class="close-btn" (click)="closeBookingModal()"><i class="fa-solid fa-xmark"></i></button>
+    <h2>Book Your Trip</h2>
+    <p class="booking-package-name">You are booking: <strong>{{ currentPackage.name }}</strong></p>
+    <form [formGroup]="bookingForm" (ngSubmit)="handleBookingSubmit()">
+      <div class="form-group">
+        <label for="travelDate">Select Travel Date</label>
+        <input type="date" id="travelDate" formControlName="travelDate" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="numberOfTravelers">Number of Travelers</label>
+        <input type="number" id="numberOfTravelers" formControlName="numberOfTravelers" class="form-control" min="1" max="10">
+      </div>
+      <div class="form-group-checkbox">
+        <input type="checkbox" id="insuranceSelected" formControlName="insuranceSelected">
+        <label for="insuranceSelected">Add Travel Insurance (+{{ insuranceCostPerTraveler | currency:'USD' }} per traveler)</label>
+      </div>
+      <div class="total-cost-section" *ngIf="totalBookingCost > 0">
+        <p class="total-cost-label">Total Estimated Cost:</p>
+        <p class="total-cost-amount">{{ totalBookingCost | currency:'USD':'symbol':'1.2-2' }}</p>
+      </div>
+      <button type="submit" class="submit-booking-btn" [disabled]="bookingForm.invalid">Proceed to Payment</button>
+    </form>
+  </div>
+</div>
+
+<ng-template #loadingPackage>
+  <div class="page-container"><div class="loading-placeholder">Loading package details...</div></div>
+</ng-template>
+<ng-template #noPackageFound>
+  <div class="page-container"><div class="loading-placeholder">Sorry, the requested package could not be found.</div></div>
+</ng-template>
+
+<div class="notification-toast" *ngIf="notificationMessage">{{ notificationMessage }}</div>

@@ -1,0 +1,587 @@
+/* ---
+   V5: FUTURISTIC & MINIMAL REDESIGN
+--- */
+
+// 1. THEME & BASE STYLES
+// ---------------------------------------------------
+:host {
+  --color-background: #030712;      // Near black
+  --color-background-soft: #111827; // Very dark gray-blue
+  --color-surface: #1F2937;         // Dark slate
+  --color-primary-action: #3B82F6;  // Vibrant Blue
+  --color-primary-action-hover: #2563EB;
+  --color-text-primary: #F9FAFB;    // Almost white
+  --color-text-secondary: #9CA3AF; // Gray
+  --color-border: #374151;
+  --color-star: #FBBF24; // Amber
+  --color-success: #22C55E; // Green
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+  --shadow-action: 0 0 20px 0 rgba(59, 130, 246, 0.5);
+  --border-radius-md: 8px;
+  --border-radius-lg: 16px;
+  --font-primary: 'Inter', sans-serif;
+  --font-headings: 'Lexend', sans-serif;
+  
+  font-family: var(--font-primary);
+  color: var(--color-text-primary);
+  background-color: var(--color-background);
+}
+
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h2, h3 {
+  font-family: var(--font-headings);
+  color: var(--color-text-primary);
+}
+
+h2 {
+  font-size: 2.5rem;
+  margin: 0 0 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 0.75rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+
+// 2. HEADER & LAYOUT
+// ---------------------------------------------------
+.package-header {
+  padding: 4rem 1.5rem;
+  text-align: center;
+}
+
+.package-title {
+  font-family: var(--font-headings);
+  font-size: clamp(2.8rem, 6vw, 4.5rem);
+  color: black;
+  margin: 0 0 1rem;
+}
+
+.package-meta {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  i {
+    color: var(--color-primary-action);
+    margin-right: 0.5rem;
+  }
+}
+
+.package-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  padding: 1.5rem;
+  position: relative;
+  z-index: 2;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    align-items: flex-start;
+  }
+}
+
+.package-main-content {
+  padding-bottom: 100px; // Space for mobile action bar
+  @media (min-width: 1024px) {
+    padding-bottom: 0;
+  }
+}
+
+.package-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 2rem;
+  border: 1px solid var(--color-border);
+}
+
+.content-wrapper {
+  background: var(--color-background-soft);
+  border-radius: var(--border-radius-lg);
+  padding: 2.5rem;
+  border: 1px solid var(--color-border);
+}
+
+.content-section {
+  padding-bottom: 2.5rem;
+  margin-bottom: 2.5rem;
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+}
+
+.package-description {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--color-text-secondary);
+}
+
+
+// 3. REVIEWS & SUBMISSION FORM
+// ---------------------------------------------------
+.review-submission-wrapper {
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius-md);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--color-border);
+}
+
+.review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.star-rating-input .stars {
+  display: flex;
+  gap: 0.25rem;
+  font-size: 2rem;
+  color: var(--color-text-secondary);
+  span {
+    cursor: pointer;
+    transition: transform 0.1s ease-in-out, color 0.2s ease;
+    &:hover {
+      transform: scale(1.2);
+    }
+    &.filled {
+      color: var(--color-star);
+    }
+  }
+}
+
+.submit-review-btn {
+  background: transparent;
+  color: var(--color-primary-action);
+  border: 1px solid var(--color-primary-action);
+  font-weight: 600;
+  padding: 0.75rem;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  &:hover:not(:disabled) {
+    background: var(--color-primary-action);
+    color: var(--color-text-primary);
+  }
+  &:disabled {
+    border-color: var(--color-text-secondary);
+    color: var(--color-text-secondary);
+    cursor: not-allowed;
+  }
+}
+
+.review-card {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  .author-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .author-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--color-primary-action);
+    color: var(--color-text-primary);
+    display: grid;
+    place-items: center;
+    font-weight: 600;
+    font-size: 1.2rem;
+  }
+}
+
+.review-author {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.star-rating .star {
+  font-size: 1rem;
+  &.filled { color: var(--color-star); }
+  &:not(.filled) { color: var(--color-border); }
+}
+
+.review-comment {
+  margin: 0.5rem 0 1rem;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+
+.review-date {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  text-align: right;
+  opacity: 0.7;
+}
+
+.agent-response {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--color-surface);
+  border-left: 3px solid var(--color-primary-action);
+  border-radius: var(--border-radius-md);
+  .response-header {
+    margin-bottom: 0.5rem;
+    color: var(--color-primary-action);
+  }
+  .response-comment {
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0.5rem 0;
+  }
+  .response-date {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    opacity: 0.7;
+  }
+}
+
+
+// 4. BOOKING PANEL (DESKTOP)
+// ---------------------------------------------------
+.package-booking-panel {
+  display: none;
+  @media (min-width: 1024px) {
+    display: block;
+    position: sticky;
+    top: 1.5rem;
+  }
+}
+
+.booking-panel-content {
+  background: var(--color-background-soft);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-lg);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.price-display {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  .price-amount {
+    font-size: 2.75rem;
+    font-weight: 700;
+  }
+  .price-label {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+  }
+}
+
+.book-now-btn, .submit-booking-btn {
+  width: 100%;
+  background: var(--color-primary-action);
+  color: var(--color-text-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 1rem;
+  border-radius: var(--border-radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  &:hover:not(:disabled) {
+    background: var(--color-primary-action-hover);
+    box-shadow: var(--shadow-action);
+    transform: translateY(-3px);
+  }
+  &:disabled {
+    background-color: var(--color-surface);
+    color: var(--color-text-secondary);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+.key-features {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  color: var(--color-text-secondary);
+  li {
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    i {
+      color: var(--color-success);
+      margin-right: 0.75rem;
+    }
+  }
+}
+
+
+// 5. FLOATING MOBILE ACTION BAR
+// ---------------------------------------------------
+.mobile-action-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(3, 7, 18, 0.8);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--color-border);
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  animation: slideInUp 0.5s ease-out;
+
+  .book-now-btn-mobile {
+    background: var(--color-primary-action);
+    color: var(--color-text-primary);
+    font-weight: 600;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--border-radius-md);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    &:hover { background: var(--color-primary-action-hover); }
+  }
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
+}
+
+
+// 6. MODAL & FORM STYLES
+// ---------------------------------------------------
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideInUp { from { transform: translateY(30px) scale(0.98); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: var(--color-background-soft);
+  padding: 2.5rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+  animation: slideInUp 0.4s ease;
+  border: 1px solid var(--color-border);
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 1.75rem;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color 0.2s ease;
+  &:hover { color: var(--color-text-primary); }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  label {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+  }
+  .form-control {
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    &::placeholder { color: var(--color-text-secondary); }
+    &:focus {
+      outline: none;
+      border-color: var(--color-primary-action);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+    }
+  }
+}
+
+.form-group-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  input[type="checkbox"] {
+    width: 1.25em;
+    height: 1.25em;
+    accent-color: var(--color-primary-action);
+    cursor: pointer;
+  }
+}
+
+.total-cost-section {
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .total-cost-amount {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+  }
+}
+
+// 7. UTILITIES
+// ---------------------------------------------------
+.loading-placeholder, .no-reviews-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  font-size: 1.25rem;
+  color: var(--color-text-secondary);
+}
+
+.notification-toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-text-primary);
+  color: var(--color-background);
+  padding: 1rem 1.5rem;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 2000;
+  animation: fadeIn 0.3s ease, fadeOut 0.3s ease 2.7s;
+}
+
+// 8. REVIEW EDIT/DELETE ACTIONS
+// ---------------------------------------------------
+.review-actions {
+  display: flex;
+  gap: 0.5rem;
+  button {
+    background: transparent;
+    border: 1px solid var(--color-border);
+    padding: 0.4rem 0.6rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s;
+    &:hover {
+      background: var(--color-surface);
+    }
+  }
+}
+
+.edit-rating {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+  .star-edit {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--color-border);
+    transition: color 0.2s;
+    &.filled {
+      color: var(--color-star);
+    }
+    &:hover {
+      color: var(--color-star);
+    }
+  }
+}
+
+.edit-comment {
+  width: 100%;
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  padding: 0.75rem;
+  font-family: inherit;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary-action);
+  }
+}
+
+.edit-actions {
+  display: flex;
+  gap: 0.5rem;
+  button {
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-md);
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .save-btn {
+    background: var(--color-primary-action);
+    color: var(--color-text-primary);
+    &:hover {
+      background: var(--color-primary-action-hover);
+    }
+  }
+  .cancel-btn {
+    background: transparent;
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+    &:hover {
+      background: var(--color-surface);
+    }
+  }
+}

@@ -1,0 +1,47 @@
+<div class="login-container">
+  <div class="login-box">
+    <div class="left-panel">
+      <h2 class="title">EXPLORE<br />HORIZONS</h2>
+      <p class="subtitle">Where Your Dream Destinations Become Reality.</p>
+      <p class="description">Embark on a journey where every corner of the world is within your reach.</p>
+    </div>
+
+    <div class="form-panel">
+      <form [formGroup]="loginForm" (ngSubmit)="handleLogin()">
+
+        <label>Email or Username</label>
+        <input type="text" placeholder="Enter your email or username" name="usernameOrEmail" formControlName="usernameOrEmail" />
+        @if(loginForm.controls['usernameOrEmail'].touched && loginForm.controls['usernameOrEmail'].invalid){
+
+        <div class="text-danger">
+          @if(loginForm.controls['usernameOrEmail'].errors?.['required']){
+          <span>Enter Valid username or email</span>}
+          @if(loginForm.controls['usernameOrEmail'].errors?.['minlength']){
+          <span>Enter Valid username or email</span>}
+        </div>
+        }
+        <label>Password</label>
+        <input type="password" placeholder="••••••••" name="password" formControlName="password"/>
+        @if(loginForm.controls['password'].touched && loginForm.controls['password'].invalid){
+        <div class="text-danger">
+        @if(loginForm.controls['password'].errors?.['required']){
+        <span>Enter Valid Password</span>}
+        </div>
+        }
+
+        @if(errorMessage) {
+          <div class="error-message">
+            {{ errorMessage }}
+          </div>
+        }
+        <button type="submit" [disabled]="loginForm.invalid || isLoading">
+          {{ isLoading ? 'SIGNING IN...' : 'SIGN IN' }}
+        </button>
+
+        <p class="footer-text">
+          Are you new? <a routerLink="/register">Create an Account</a>
+        </p>
+      </form>
+    </div>
+  </div>
+</div>

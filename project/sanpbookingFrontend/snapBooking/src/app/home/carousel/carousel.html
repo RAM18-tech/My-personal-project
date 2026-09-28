@@ -1,0 +1,81 @@
+<div style="background-image: url('assets/images/default.jpg'); background-size: cover; background-position: center; height: 100vh; width: 100%;">
+    <div id="hero-carousel" class="carousel slide" data-bs-ride="carousel" style="background: transparent;">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#hero-carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#hero-carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#hero-carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+<!--  -->
+        <div class="carousel-inner">
+        <div class="carousel-item active c-item">
+            <div class="carousel-caption">
+            <h1 class="carousel-headline">Welcome To Our Travel Agency</h1>
+            </div>
+        </div>
+ 
+        <div class="carousel-item c-item">
+            <div class="carousel-caption">
+            <h1 class="carousel-headline">Custom Tours & Curated Packages</h1>
+            </div>
+        </div>
+ 
+        <div class="carousel-item c-item">
+            <div class="carousel-caption">
+            <h1 class="carousel-headline">Book With Confidence</h1>
+            </div>
+        </div>
+        </div>
+ 
+ 
+        <button class="carousel-control-prev" type="button" data-bs-target="#hero-carousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#hero-carousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+ 
+ 
+<!---->
+<br>
+<div class="container booking-container" style="max-width: 1140px; width: 100%;">
+    <div class="row g-4">
+        <!-- Packages Card -->
+        <div class="col-md-6">
+            <div class="service-card packages-card" routerLink="/packages">
+                <div class="card-overlay">
+                    <div class="card-content">
+                        <i class="fa-solid fa-box card-icon"></i>
+                        <h3>Travel Packages</h3>
+                        <p>Discover amazing destinations with our curated travel packages</p>
+                        <div class="card-button">
+                            <span>Explore Packages</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+        <!-- Insurance Card -->
+        <div class="col-md-6">
+            <div class="service-card insurance-card" routerLink="/insurance">
+                <div class="card-overlay">
+                    <div class="card-content">
+                        <i class="fa-solid fa-shield-alt card-icon"></i>
+                        <h3>Travel Insurance</h3>
+                        <p>Protect your journey with comprehensive travel insurance coverage</p>
+                        <div class="card-button">
+                            <span>Get Insurance</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+ 

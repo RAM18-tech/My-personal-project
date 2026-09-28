@@ -1,0 +1,89 @@
+<div class="register-container">
+  <div class="register-box">
+    <div class="left-panel">
+        <h2 class="title">CREATE<br />ACCOUNT</h2>
+        <p class="subtitle">Join us and start your adventure.</p>
+        <p class="description">Sign up to explore, plan and book your dream getaways.</p>
+    </div>
+
+    <div class="form-panel">
+        <form [formGroup]="userForm" (ngSubmit)="handleRegister()">
+
+            <!-- Full Name Input -->
+            <label>Full Name</label>
+            <input type="text" placeholder="Enter your name" formControlName="name" />
+            @if (userForm.controls.name.invalid && userForm.controls.name.touched) {
+                <div class="text-danger">
+                    <span>Full Name is required.</span>
+                </div>
+            }
+
+            <!-- Username Input -->
+            <label>Username</label>
+            <input type="text" placeholder="Enter your username" formControlName="username" />
+            @if (userForm.controls.username.invalid && userForm.controls.username.touched) {
+                <div class="text-danger">
+                    @if(userForm.controls.username.errors?.['required']){
+                    <span>Username is required.</span>}
+                  @if(userForm.controls.username.errors?.['minlength']){
+                  <span>Username should have minimum length of 4 characters</span>
+                  }
+                  @if(userForm.controls.username.errors?.['maxlength']){
+                  <span>Username can have maximum length of 20 characters</span>
+                  }
+                </div>
+            }
+
+            <!-- Email Input -->
+            <label>Email</label>
+            <input type="email" placeholder="Enter your email" formControlName="email"/>
+            @if (userForm.controls.email.invalid && userForm.controls.email.touched) {
+                <div class="text-danger">
+                    @if (userForm.controls.email.errors?.['required']) {
+                        <span>Email is required.</span>
+                    }
+                    @if (userForm.controls.email.errors?.['email']) {
+                        <span>Please enter a valid email address.</span>
+                    }
+                </div>
+            }
+
+            <!-- Password Input -->
+            <label>Password</label>
+            <input type="password" placeholder="Create password" formControlName="password"/>
+            @if (userForm.controls.password.invalid && userForm.controls.password.touched) {
+                <div class="text-danger">
+                    @if (userForm.controls.password.errors?.['required']) {
+                        <span>Password is required.</span>
+                    }
+                    @if (userForm.controls.password.errors?.['minlength']) {
+                        <span>Password must be at least 6 characters long.</span>
+                    }
+                </div>
+            }
+
+            <!-- Confirm Password Input -->
+            <label>Confirm Password</label>
+            <input type="password" placeholder="Confirm password" formControlName="confirmPassword" />
+            @if (userForm.controls.confirmPassword.touched && userForm.hasError('passwordMismatch')) {
+                <div class="text-danger">
+                    <span>Passwords do not match.</span>
+                </div>
+            }
+
+            <!-- Register as Agent Checkbox -->
+            <div class="checkbox-container">
+                <input type="checkbox" id="registerAsAgent" formControlName="registerAsAgent" />
+                <label for="registerAsAgent">Register as an Agent</label>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" [disabled]="userForm.invalid">Register</button>
+
+            <p class="footer-text">
+                Already have an account? <a routerLink="/login">Login</a>
+            </p>
+        </form>
+    </div>
+  </div>
+</div>
